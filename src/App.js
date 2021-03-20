@@ -1,5 +1,4 @@
-import { format } from 'd3-format';
-import React, { useState } from 'react';
+import React from 'react';
 import { Block, Format } from './blocks';
 
 export default class App extends React.Component {
@@ -13,11 +12,27 @@ export default class App extends React.Component {
         };
     }
 
+    componentDidMount() {
+        document.addEventListener('keydown', this.handleKeyDown);
+    }
+
     componentDidUpdate() {
         if (this.state.curentIteration > this.iterationPerTrial) {
             this.advanceTrial();
         }
     }
+    handleKeyDown = (event) => {
+        if (
+            this.state.showInstruction &&
+            (event.key === 'Spacebar' ||
+                event.key === ' ' ||
+                event.keyCode === 32)
+        ) {
+            this.setState({
+                showInstruction: false,
+            });
+        }
+    };
 
     advanceTrial = () => {
         this.setState({
@@ -30,12 +45,6 @@ export default class App extends React.Component {
     advanceIteration = () => {
         this.setState({
             curentIteration: this.state.curentIteration + 1,
-        });
-    };
-
-    toggleInstructionScreen = () => {
-        this.setState({
-            showInstruction: !this.state.showInstruction,
         });
     };
 
@@ -63,7 +72,6 @@ export default class App extends React.Component {
                         format={trialParameters[this.state.currentTrial].format}
                         n={trialParameters[this.state.currentTrial].n}
                         showInstruction={this.state.showInstruction}
-                        toggleInstructionScreen={this.toggleInstructionScreen}
                         instructType={
                             trialParameters[this.state.currentTrial]
                                 .instructType
@@ -87,26 +95,20 @@ export class Trials extends React.Component {
             format,
             n,
             showInstruction,
-            toggleInstructionScreen,
             instructType,
             curentIteration,
             advanceIteration,
         } = this.props;
         if (showInstruction) {
-            const handleAdvance = (e) => {
-                if (e.key === 'Spacebar' || e.key === ' ' || e.keyCode === 32) {
-                    toggleInstructionScreen();
-                }
-            };
-
             return (
-                <div tabIndex="0" onKeyDown={handleAdvance}>
+                <div>
                     <h1>{`${format} phase`}</h1>
                     <p>
                         {instructType === 1
                             ? `Perform the required task for a group of ${n} numbers`
                             : `Now do the same for a group of ${n} numbers`}
                     </p>
+                    <p>{'Press Space to Continue'}</p>
                 </div>
             );
         } else {
