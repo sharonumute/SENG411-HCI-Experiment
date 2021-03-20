@@ -1,5 +1,6 @@
 import React from 'react';
 import * as d3 from 'd3';
+import * as seedrandom from 'seedrandom';
 
 export const Format = Object.freeze({ TEXT: 'Text', BUBBLE: 'Bubble' });
 
@@ -26,6 +27,7 @@ export class Block extends React.Component {
             startTime,
             curentIteration,
             advanceIteration,
+            experimentSeed,
         } = this.props;
 
         // the canvas size
@@ -34,10 +36,13 @@ export class Block extends React.Component {
 
         const NB_VALUES = n;
 
-        var values = d3
-            .range(NB_VALUES)
-            .map((d) => Math.floor(Math.random() * 100)); // the randomly generated set of values between 0 and 99
+        const random = seedrandom(
+            `${experimentSeed}${format}${n}${curentIteration}`
+        );
 
+        var values = d3.range(NB_VALUES).map((d) => Math.floor(random() * 100)); // the randomly generated set of values between 0 and 99
+
+        console.log(experimentSeed);
         console.log(values);
 
         var pad = 5; //padding for grid layout (text and bubble)

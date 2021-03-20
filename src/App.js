@@ -63,7 +63,7 @@ export default class App extends React.Component {
             { format: Format.BUBBLE, n: 25, instructType: 2 },
         ];
 
-        if (this.state.currentTrial == trialParameters.length) {
+        if (this.state.currentTrial === trialParameters.length) {
             return <div>done</div>;
         } else {
             return (
@@ -78,6 +78,7 @@ export default class App extends React.Component {
                         }
                         curentIteration={this.state.curentIteration}
                         advanceIteration={this.advanceIteration}
+                        experimentSeed={this.props.experimentSeed}
                     />
                 </div>
             );
@@ -86,10 +87,6 @@ export default class App extends React.Component {
 }
 
 export class Trials extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         const {
             format,
@@ -98,6 +95,7 @@ export class Trials extends React.Component {
             instructType,
             curentIteration,
             advanceIteration,
+            experimentSeed,
         } = this.props;
         if (showInstruction) {
             return (
@@ -119,6 +117,7 @@ export class Trials extends React.Component {
                     startTime={Date.now()}
                     curentIteration={curentIteration}
                     advanceIteration={advanceIteration}
+                    experimentSeed={experimentSeed}
                 />
             );
         }
