@@ -11,8 +11,10 @@ export default class App extends React.Component {
             showInstruction: true,
             curentIteration: 1,
             results: [],
+            showIntro: true,
         };
         this.userID = Math.floor(Math.random() * 90000) + 10000;
+        this.groupCode = 0;
     }
 
     componentDidMount() {
@@ -57,7 +59,47 @@ export default class App extends React.Component {
         });
     };
 
+    beginTrials = (event) => {
+        if (event.keyCode === 13) {
+            var elem = event.srcElement || event.target;
+            this.groupCode = elem.value;
+            this.setState({
+                showIntro: false,
+            });
+        }
+    };
+
     render() {
+        if (this.state.showIntro) {
+            return (
+                <div className="App">
+                    <h1>{'Weclcome to our visualization experiment'}</h1>
+                    <p>
+                        For this experiment, you will be shown a series of
+                        numbers represented as either text or circles of
+                        corresponding sizes.
+                    </p>
+                    <p>
+                        Your required task is to click the biggest number/circle
+                        as fast as you can
+                    </p>
+                    <p>
+                        To begin, please enter a group code, if you were given
+                        one.
+                    </p>
+                    <p>
+                        This is to ensure everyone in your group, who performs
+                        the experiment, receives the same trials.
+                    </p>
+                    <input
+                        type="text"
+                        placeholder="Please enter group code"
+                        onKeyDown={this.beginTrials}
+                    />
+                </div>
+            );
+        }
+
         console.log('CURRENT TRIAL', this.state.currentTrial);
         console.log('CURRENT ITERATION', this.state.curentIteration);
 
@@ -114,7 +156,7 @@ export default class App extends React.Component {
                         }
                         curentIteration={this.state.curentIteration}
                         advanceIteration={this.advanceIteration}
-                        experimentSeed={this.props.experimentSeed}
+                        experimentSeed={this.groupCode}
                         userID={this.userID}
                         addResults={this.addResults}
                     />
