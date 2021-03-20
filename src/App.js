@@ -1,5 +1,6 @@
 import React from 'react';
 import { Block, Format } from './blocks';
+import './App.css';
 
 export default class App extends React.Component {
     constructor(props) {
@@ -9,7 +10,9 @@ export default class App extends React.Component {
             currentTrial: 0,
             showInstruction: true,
             curentIteration: 1,
+            results: [],
         };
+        this.userID = Math.floor(Math.random() * 90000) + 10000;
     }
 
     componentDidMount() {
@@ -48,6 +51,12 @@ export default class App extends React.Component {
         });
     };
 
+    addResults = (newResult) => {
+        this.setState({
+            results: [...this.state.results, newResult],
+        });
+    };
+
     render() {
         console.log('CURRENT TRIAL', this.state.currentTrial);
         console.log('CURRENT ITERATION', this.state.curentIteration);
@@ -64,7 +73,34 @@ export default class App extends React.Component {
         ];
 
         if (this.state.currentTrial === trialParameters.length) {
-            return <div>done</div>;
+            return (
+                <div className="App">
+                    <h2>{'Thank you for participating'}</h2>
+                    <p>{'Your results are below'}</p>
+                    <table>
+                        <thead>
+                            <tr key={'header'}>
+                                {Object.keys(this.state.results[0]).map(
+                                    (key, headerIndex) => (
+                                        <th key={headerIndex}>{key}</th>
+                                    )
+                                )}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {this.state.results.map((item, index) => (
+                                <tr key={index}>
+                                    {Object.values(item).map(
+                                        (val, innerIndex) => (
+                                            <td key={innerIndex}>{val}</td>
+                                        )
+                                    )}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            );
         } else {
             return (
                 <div className="App">
@@ -79,6 +115,8 @@ export default class App extends React.Component {
                         curentIteration={this.state.curentIteration}
                         advanceIteration={this.advanceIteration}
                         experimentSeed={this.props.experimentSeed}
+                        userID={this.userID}
+                        addResults={this.addResults}
                     />
                 </div>
             );
@@ -96,6 +134,8 @@ export class Trials extends React.Component {
             curentIteration,
             advanceIteration,
             experimentSeed,
+            userID,
+            addResults,
         } = this.props;
         if (showInstruction) {
             return (
@@ -111,14 +151,19 @@ export class Trials extends React.Component {
             );
         } else {
             return (
-                <Block
-                    format={format}
-                    n={n}
-                    startTime={Date.now()}
-                    curentIteration={curentIteration}
-                    advanceIteration={advanceIteration}
-                    experimentSeed={experimentSeed}
-                />
+                <div>
+                    <h1>{`Iteration ${curentIteration}`}</h1>
+                    <Block
+                        format={format}
+                        n={n}
+                        startTime={Date.now()}
+                        curentIteration={curentIteration}
+                        advanceIteration={advanceIteration}
+                        experimentSeed={experimentSeed}
+                        userID={userID}
+                        addResults={addResults}
+                    />
+                </div>
             );
         }
     }

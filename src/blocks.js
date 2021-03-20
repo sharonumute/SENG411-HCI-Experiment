@@ -28,6 +28,8 @@ export class Block extends React.Component {
             curentIteration,
             advanceIteration,
             experimentSeed,
+            userID,
+            addResults,
         } = this.props;
 
         // the canvas size
@@ -86,7 +88,9 @@ export class Block extends React.Component {
             })
             .on('click', (d) => {
                 const endTime = Date.now();
-                const reactTime = Math.floor((endTime - startTime) / 1000);
+                const diffInSeconds = (endTime - startTime) / 1000;
+                const reactTime =
+                    Math.round((diffInSeconds + Number.EPSILON) * 100) / 100;
 
                 const selectedAnswer = d.srcElement.__data__;
                 var correctAnswer, maxVal;
@@ -96,14 +100,22 @@ export class Block extends React.Component {
                 const error = Math.abs(
                     (correctAnswer - selectedAnswer) / (maxVal - minVal)
                 );
+                const roundedError =
+                    Math.round((error + Number.EPSILON) * 1000) / 1000;
 
-                console.log('Number of values: ', n);
-                console.log('Format: ', format);
-                console.log('Iteration: ', curentIteration);
-                console.log('React time: ', reactTime);
-                console.log('Answer picked: ', selectedAnswer);
-                console.log('Correct answer: ', correctAnswer);
-                console.log('Error: ', error);
+                const results = {
+                    'Group code': experimentSeed,
+                    'User ID': userID,
+                    Format: format,
+                    'Number of values': n,
+                    Iteration: curentIteration,
+                    'Reaction time (seconds)': reactTime,
+                    'Error (0-1)': roundedError,
+                };
+
+                addResults(results);
+
+                console.log(results);
 
                 advanceIteration();
             })
