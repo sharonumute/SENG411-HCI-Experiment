@@ -4,7 +4,7 @@ export default class Introduction extends React.Component {
     render() {
         return (
             <div>
-                <h1>Weclcome to our visualization experiment</h1>
+                <h1>Welcome to our visualization experiment</h1>
                 <p>
                     For this experiment, you will be shown a series of numbers
                     represented as either text or circles of corresponding
