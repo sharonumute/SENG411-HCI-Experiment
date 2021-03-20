@@ -122,3 +122,42 @@ table th {
         border-bottom: 0;
     }
 }
+
+button {
+    background-color: #bc4f4f;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 8px;
+    margin: 0 0 15px 0;
+    cursor: pointer;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3), 0 1px 3px 1px rgba(0, 0, 0, 0.15);
+}
+
+button:hover {
+    background-color: #841f1f;
+    color: #dedbdb;
+}
+
+button:active {
+    background-color: #631010;
+    color: #dedbdb;
+    box-shadow: none;
+    outline: none;
+}
+
+button:focus {
+    outline: none;
+}
+
+.submittedSuccessfully {
+    color: #3d9970;
+    margin: 0 0 15px 0;
+    font-weight: bolder;
+}
+
+.submittedFailed {
+    color: #841f1f;
+    margin: 0 0 15px 0;
+    font-weight: bolder;
+}

@@ -1,24 +1,48 @@
 import React from 'react';
-import { Block, Format } from './blocks';
+import { Block, Format } from './components/Block';
+import Trial from './components/Trial';
+import Introduction from './components/Introduction';
+import EndScreen from './components/EndScreen';
 import './App.css';
+import axios from 'axios';
+
+export const DataSubmissionStatus = Object.freeze({
+    NOT_SUBMITTED: 1,
+    SUCCESFUL: 2,
+    FAILED: 3,
+});
 
 export default class App extends React.Component {
     constructor(props) {
         super(props);
-        this.iterationPerTrial = 3;
+
         this.state = {
             currentTrial: 0,
             showInstruction: true,
             curentIteration: 1,
             results: [],
             showIntro: true,
+            dataSubmitted: DataSubmissionStatus.NOT_SUBMITTED,
         };
+
         this.userID = Math.floor(Math.random() * 90000) + 10000;
         this.groupCode = 0;
+
+        this.iterationPerTrial = 3;
+        this.trialParameters = [
+            { format: Format.TEXT, n: 3, instructType: 1 },
+            { format: Format.TEXT, n: 5, instructType: 2 },
+            { format: Format.TEXT, n: 9, instructType: 2 },
+            { format: Format.TEXT, n: 25, instructType: 2 },
+            { format: Format.BUBBLE, n: 3, instructType: 1 },
+            { format: Format.BUBBLE, n: 5, instructType: 2 },
+            { format: Format.BUBBLE, n: 9, instructType: 2 },
+            { format: Format.BUBBLE, n: 25, instructType: 2 },
+        ];
     }
 
     componentDidMount() {
-        document.addEventListener('keydown', this.handleKeyDown);
+        document.addEventListener('keydown', this.onSpacebarClicked);
     }
 
     componentDidUpdate() {
@@ -26,7 +50,18 @@ export default class App extends React.Component {
             this.advanceTrial();
         }
     }
-    handleKeyDown = (event) => {
+
+    beginExperiment = (event) => {
+        if (event.keyCode === 13) {
+            var elem = event.srcElement || event.target;
+            this.groupCode = elem.value;
+            this.setState({
+                showIntro: false,
+            });
+        }
+    };
+
+    onSpacebarClicked = (event) => {
         if (
             this.state.showInstruction &&
             (event.key === 'Spacebar' ||
@@ -39,17 +74,17 @@ export default class App extends React.Component {
         }
     };
 
+    advanceIteration = () => {
+        this.setState({
+            curentIteration: this.state.curentIteration + 1,
+        });
+    };
+
     advanceTrial = () => {
         this.setState({
             currentTrial: this.state.currentTrial + 1,
             curentIteration: 1,
             showInstruction: true,
-        });
-    };
-
-    advanceIteration = () => {
-        this.setState({
-            curentIteration: this.state.curentIteration + 1,
         });
     };
 
@@ -59,154 +94,94 @@ export default class App extends React.Component {
         });
     };
 
-    beginTrials = (event) => {
-        if (event.keyCode === 13) {
-            var elem = event.srcElement || event.target;
-            this.groupCode = elem.value;
-            this.setState({
-                showIntro: false,
+    submitHandler = (e) => {
+        e.preventDefault();
+        console.log(this.state.results);
+
+        axios
+            .post(
+                'https://sheet.best/api/sheets/34aac690-2c0c-4062-8da7-5ca1898ca293',
+                this.state.results
+            )
+            .then((response) => {
+                console.log(response);
+                this.setState({
+                    dataSubmitted: DataSubmissionStatus.SUCCESFUL,
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+                this.setState({
+                    dataSubmitted: DataSubmissionStatus.FAILED,
+                });
             });
-        }
     };
 
-    render() {
+    whatToShow = () => {
         if (this.state.showIntro) {
+            return <Introduction onBeginExperiment={this.beginExperiment} />;
+        } else if (this.state.currentTrial === this.trialParameters.length) {
+            var submissionStatusObject = null;
+
+            if (this.state.dataSubmitted === DataSubmissionStatus.SUCCESFUL) {
+                submissionStatusObject = (
+                    <div className={'submittedSuccessfully'}>
+                        Data submission complete
+                    </div>
+                );
+            } else if (
+                this.state.dataSubmitted === DataSubmissionStatus.FAILED
+            ) {
+                submissionStatusObject = (
+                    <div className={'submittedFailed'}>
+                        Data submission failed
+                    </div>
+                );
+            }
+
             return (
-                <div className="App">
-                    <h1>{'Weclcome to our visualization experiment'}</h1>
-                    <p>
-                        For this experiment, you will be shown a series of
-                        numbers represented as either text or circles of
-                        corresponding sizes.
-                    </p>
-                    <p>
-                        Your required task is to click the biggest number/circle
-                        as fast as you can
-                    </p>
-                    <p>
-                        To begin, please enter a group code, if you were given
-                        one.
-                    </p>
-                    <p>
-                        This is to ensure everyone in your group, who performs
-                        the experiment, receives the same trials.
-                    </p>
-                    <input
-                        type="text"
-                        placeholder="Please enter group code"
-                        onKeyDown={this.beginTrials}
-                    />
-                </div>
-            );
-        }
-
-        console.log('CURRENT TRIAL', this.state.currentTrial);
-        console.log('CURRENT ITERATION', this.state.curentIteration);
-
-        const trialParameters = [
-            { format: Format.TEXT, n: 3, instructType: 1 },
-            { format: Format.TEXT, n: 5, instructType: 2 },
-            { format: Format.TEXT, n: 9, instructType: 2 },
-            { format: Format.TEXT, n: 25, instructType: 2 },
-            { format: Format.BUBBLE, n: 3, instructType: 1 },
-            { format: Format.BUBBLE, n: 5, instructType: 2 },
-            { format: Format.BUBBLE, n: 9, instructType: 2 },
-            { format: Format.BUBBLE, n: 25, instructType: 2 },
-        ];
-
-        if (this.state.currentTrial === trialParameters.length) {
-            return (
-                <div className="App">
-                    <h2>{'Thank you for participating'}</h2>
-                    <p>{'Your results are below'}</p>
-                    <table>
-                        <thead>
-                            <tr key={'header'}>
-                                {Object.keys(this.state.results[0]).map(
-                                    (key, headerIndex) => (
-                                        <th key={headerIndex}>{key}</th>
-                                    )
-                                )}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {this.state.results.map((item, index) => (
-                                <tr key={index}>
-                                    {Object.values(item).map(
-                                        (val, innerIndex) => (
-                                            <td key={innerIndex}>{val}</td>
-                                        )
-                                    )}
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+                <EndScreen
+                    results={this.state.results}
+                    showSubmitButton={
+                        this.state.dataSubmitted ===
+                        DataSubmissionStatus.NOT_SUBMITTED
+                    }
+                    submissionStatusObject={submissionStatusObject}
+                    onSubmit={this.submitHandler}
+                />
             );
         } else {
             return (
-                <div className="App">
-                    <Trials
-                        format={trialParameters[this.state.currentTrial].format}
-                        n={trialParameters[this.state.currentTrial].n}
-                        showInstruction={this.state.showInstruction}
-                        instructType={
-                            trialParameters[this.state.currentTrial]
-                                .instructType
+                <Trial
+                    format={
+                        this.trialParameters[this.state.currentTrial].format
+                    }
+                    n={this.trialParameters[this.state.currentTrial].n}
+                    showInstruction={this.state.showInstruction}
+                    instructType={
+                        this.trialParameters[this.state.currentTrial]
+                            .instructType
+                    }
+                    curentIteration={this.state.curentIteration}
+                >
+                    <Block
+                        format={
+                            this.trialParameters[this.state.currentTrial].format
                         }
+                        n={this.trialParameters[this.state.currentTrial].n}
+                        startTime={Date.now()}
                         curentIteration={this.state.curentIteration}
                         advanceIteration={this.advanceIteration}
                         experimentSeed={this.groupCode}
                         userID={this.userID}
                         addResults={this.addResults}
                     />
-                </div>
+                </Trial>
             );
         }
-    }
-}
+    };
 
-export class Trials extends React.Component {
     render() {
-        const {
-            format,
-            n,
-            showInstruction,
-            instructType,
-            curentIteration,
-            advanceIteration,
-            experimentSeed,
-            userID,
-            addResults,
-        } = this.props;
-        if (showInstruction) {
-            return (
-                <div>
-                    <h1>{`${format} phase`}</h1>
-                    <p>
-                        {instructType === 1
-                            ? `Perform the required task for a group of ${n} numbers`
-                            : `Now do the same for a group of ${n} numbers`}
-                    </p>
-                    <p>{'Press Space to Continue'}</p>
-                </div>
-            );
-        } else {
-            return (
-                <div>
-                    <h1>{`Iteration ${curentIteration}`}</h1>
-                    <Block
-                        format={format}
-                        n={n}
-                        startTime={Date.now()}
-                        curentIteration={curentIteration}
-                        advanceIteration={advanceIteration}
-                        experimentSeed={experimentSeed}
-                        userID={userID}
-                        addResults={addResults}
-                    />
-                </div>
-            );
-        }
+        return <div className="App">{this.whatToShow()}</div>;
     }
 }
