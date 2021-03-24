@@ -5,6 +5,7 @@ import Introduction from './components/Introduction';
 import EndScreen from './components/EndScreen';
 import './App.css';
 import axios from 'axios';
+import 'dotenv';
 
 export const DataSubmissionStatus = Object.freeze({
     NOT_SUBMITTED: 1,
@@ -99,10 +100,7 @@ export default class App extends React.Component {
         console.log(this.state.results);
 
         axios
-            .post(
-                'https://sheet.best/api/sheets/34aac690-2c0c-4062-8da7-5ca1898ca293',
-                this.state.results
-            )
+            .post(`${process.env.REACT_APP_GOOGLE_SHEETS}`, this.state.results)
             .then((response) => {
                 console.log(response);
                 this.setState({
