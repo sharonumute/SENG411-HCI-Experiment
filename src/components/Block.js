@@ -1,6 +1,5 @@
 import React from 'react';
 import * as d3 from 'd3';
-import * as seedrandom from 'seedrandom';
 
 export const Format = Object.freeze({ TEXT: 'Text', BUBBLE: 'Bubble' });
 
@@ -25,7 +24,6 @@ export class Block extends React.Component {
             startTime,
             curentIteration,
             advanceIteration,
-            experimentSeed,
             userID,
             addResults,
         } = this.props;
@@ -47,7 +45,7 @@ export class Block extends React.Component {
         const roundedError = Math.round((error + Number.EPSILON) * 1000) / 1000;
 
         const results = {
-            'Group code': experimentSeed,
+            'Group code': 0,
             'User ID': userID,
             Format: format,
             'Number of values': n,
@@ -67,7 +65,7 @@ export class Block extends React.Component {
         d3.selectAll('svg > *').remove();
         const svg = d3.select(this.blockRef.current);
 
-        const { format, n, curentIteration, experimentSeed } = this.props;
+        const { format, n } = this.props;
 
         // The canvas size
         var width = 400;
@@ -75,13 +73,10 @@ export class Block extends React.Component {
 
         const NB_VALUES = n;
 
-        // Seeded randomizer
-        const random = seedrandom(
-            `${experimentSeed}${format}${n}${curentIteration}`
-        );
-
         // the randomly generated set of values between 0 and 99
-        var values = d3.range(NB_VALUES).map((d) => Math.floor(random() * 100));
+        var values = d3
+            .range(NB_VALUES)
+            .map((d) => Math.floor(Math.random() * 100));
 
         var pad = 5; //padding for grid layout (text and bubble)
         var numCol, numRow; // number of columns, number of rows

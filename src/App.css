@@ -1,5 +1,8 @@
 .App {
+    display: flex;
+    flex-direction: column;
     text-align: center;
+    margin: auto;
 }
 
 .App-logo {
@@ -160,4 +163,9 @@ button:focus {
     color: #841f1f;
     margin: 0 0 15px 0;
     font-weight: bolder;
+}
+
+#Introduction {
+    width: 58%;
+    margin: auto;
 }

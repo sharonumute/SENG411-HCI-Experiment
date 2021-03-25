@@ -1,5 +1,9 @@
 # SENG411 Assignment 2
 
+## Running the code
+
+1. In the root directory, run `yarn start`
+
 ## Important: Saving data to Google Sheets
 
 1. Follow the instructions on this [Medium Article](https://www.freecodecamp.org/news/react-and-googlesheets/).

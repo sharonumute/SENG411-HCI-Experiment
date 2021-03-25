@@ -27,19 +27,27 @@ export default class App extends React.Component {
         };
 
         this.userID = Math.floor(Math.random() * 90000) + 10000;
-        this.groupCode = 0;
 
         this.iterationPerTrial = 3;
-        this.trialParameters = [
+
+        this.text_trialParameters = [
             { format: Format.TEXT, n: 3, instructType: 1 },
             { format: Format.TEXT, n: 5, instructType: 2 },
             { format: Format.TEXT, n: 9, instructType: 2 },
             { format: Format.TEXT, n: 25, instructType: 2 },
+        ];
+
+        this.bubble_trialParameters = [
             { format: Format.BUBBLE, n: 3, instructType: 1 },
             { format: Format.BUBBLE, n: 5, instructType: 2 },
             { format: Format.BUBBLE, n: 9, instructType: 2 },
             { format: Format.BUBBLE, n: 25, instructType: 2 },
         ];
+
+        this.trialParameters =
+            this.userID % 2 === 0
+                ? this.text_trialParameters.concat(this.bubble_trialParameters)
+                : this.bubble_trialParameters.concat(this.text_trialParameters);
     }
 
     componentDidMount() {
@@ -52,14 +60,10 @@ export default class App extends React.Component {
         }
     }
 
-    beginExperiment = (event) => {
-        if (event.keyCode === 13) {
-            var elem = event.srcElement || event.target;
-            this.groupCode = elem.value;
-            this.setState({
-                showIntro: false,
-            });
-        }
+    beginExperiment = () => {
+        this.setState({
+            showIntro: false,
+        });
     };
 
     onSpacebarClicked = (event) => {
@@ -170,7 +174,6 @@ export default class App extends React.Component {
                         startTime={Date.now()}
                         curentIteration={this.state.curentIteration}
                         advanceIteration={this.advanceIteration}
-                        experimentSeed={this.groupCode}
                         userID={this.userID}
                         addResults={this.addResults}
                     />
