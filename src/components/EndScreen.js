@@ -29,8 +29,8 @@ export default class EndScreen extends React.Component {
 
         return (
             <div className="App">
-                <h2>Thank you for participating</h2>
-                <p>{`User ID: ${uID}`}</p>
+                <h2 id={'Thanks'}>Thank you for participating</h2>
+                <p id={'UID'}>{`User ID: ${uID}`}</p>
                 <p>Your results are below</p>
                 {this.props.showSubmitButton
                     ? submitButton

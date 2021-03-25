@@ -169,3 +169,12 @@ button:focus {
     width: 58%;
     margin: auto;
 }
+
+#Thanks {
+    margin-bottom: 0;
+}
+
+#UID {
+    margin: 0;
+    font-size: 15px;
+}
