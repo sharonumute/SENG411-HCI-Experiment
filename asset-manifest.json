@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "/SENG411-HCI-Experiment/static/css/main.164e28c1.chunk.css",
-    "main.js": "/SENG411-HCI-Experiment/static/js/main.77d8ae84.chunk.js",
-    "main.js.map": "/SENG411-HCI-Experiment/static/js/main.77d8ae84.chunk.js.map",
+    "main.css": "/SENG411-HCI-Experiment/static/css/main.967c937e.chunk.css",
+    "main.js": "/SENG411-HCI-Experiment/static/js/main.88e6f148.chunk.js",
+    "main.js.map": "/SENG411-HCI-Experiment/static/js/main.88e6f148.chunk.js.map",
     "runtime-main.js": "/SENG411-HCI-Experiment/static/js/runtime-main.2706b12f.js",
     "runtime-main.js.map": "/SENG411-HCI-Experiment/static/js/runtime-main.2706b12f.js.map",
     "static/js/2.e4067368.chunk.js": "/SENG411-HCI-Experiment/static/js/2.e4067368.chunk.js",
@@ -10,13 +10,13 @@
     "static/js/3.107501a2.chunk.js": "/SENG411-HCI-Experiment/static/js/3.107501a2.chunk.js",
     "static/js/3.107501a2.chunk.js.map": "/SENG411-HCI-Experiment/static/js/3.107501a2.chunk.js.map",
     "index.html": "/SENG411-HCI-Experiment/index.html",
-    "static/css/main.164e28c1.chunk.css.map": "/SENG411-HCI-Experiment/static/css/main.164e28c1.chunk.css.map",
+    "static/css/main.967c937e.chunk.css.map": "/SENG411-HCI-Experiment/static/css/main.967c937e.chunk.css.map",
     "static/js/2.e4067368.chunk.js.LICENSE.txt": "/SENG411-HCI-Experiment/static/js/2.e4067368.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.2706b12f.js",
     "static/js/2.e4067368.chunk.js",
-    "static/css/main.164e28c1.chunk.css",
-    "static/js/main.77d8ae84.chunk.js"
+    "static/css/main.967c937e.chunk.css",
+    "static/js/main.88e6f148.chunk.js"
   ]
 }
