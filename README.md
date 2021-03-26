@@ -1,8 +1,14 @@
 # SENG411 Assignment 2
 
+You can view the experiment at: "https://sharonumute.github.io/SENG411-HCI-Experiment"
+
 ## Running the code
 
 1. In the root directory, run `yarn start`
+
+## Important: Deployment
+
+1. in the `package.json` file, change the `homepage` variable to your deployment URL
 
 ## Important: Saving data to Google Sheets
 
