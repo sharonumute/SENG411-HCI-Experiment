@@ -45,7 +45,6 @@ export class Block extends React.Component {
         const roundedError = Math.round((error + Number.EPSILON) * 1000) / 1000;
 
         const results = {
-            'Group code': 0,
             'User ID': userID,
             Format: format,
             'Number of values': n,
